@@ -10,14 +10,17 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.actioninputspranto.customdialogs.DatePickerFragment
 import com.example.actioninputspranto.customdialogs.TimePickerFragment
 import com.example.actioninputspranto.databinding.FragmentNewScheduleBinding
 import com.example.actioninputspranto.db.ScheduleDB
+import com.example.actioninputspranto.viewmodels.ScheduleViewModel
 
 
 class NewScheduleFragment : Fragment() {
+    private val viewModel:ScheduleViewModel by activityViewModels()
     private lateinit var binding: FragmentNewScheduleBinding
     private var from = "Dhaka"
     private var to = "Dhaka"
@@ -67,10 +70,7 @@ class NewScheduleFragment : Fragment() {
             departureTime = selectedTime,
             busType = busType
         )
-        ScheduleDB
-            .getDB(requireActivity())
-            .getScheduleDao()
-            .addSchedule(schedule)
+        viewModel.addSchedule(schedule)
         findNavController().navigate(R.id.action_newScheduleFragment_to_scheduleListFragment)
 
         Log.d("ScheduleInfoCheck","saveInfo: $schedule")
