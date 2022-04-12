@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/scheduleListFragment">
+
+    <fragment
+        android:id="@+id/newScheduleFragment"
+        android:name="com.example.actioninputspranto.NewScheduleFragment"
+        android:label="fragment_new_schedule"
+        tools:layout="@layout/fragment_new_schedule" >
+        <action
+            android:id="@+id/action_newScheduleFragment_to_scheduleListFragment"
+            app:destination="@id/scheduleListFragment"
+            app:popUpTo="@id/scheduleListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleListFragment"
+        android:name="com.example.actioninputspranto.ScheduleListFragment"
+        android:label="fragment_schedule_list"
+        tools:layout="@layout/fragment_schedule_list" >
+        <action
+            android:id="@+id/action_scheduleListFragment_to_newScheduleFragment"
+            app:destination="@id/newScheduleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/implicitIntentExampleFragment"
+        android:name="com.example.actioninputspranto.ImplicitIntentExampleFragment"
+        android:label="fragment_implicit_intent_example"
+        tools:layout="@layout/fragment_implicit_intent_example" />
+</navigation>
