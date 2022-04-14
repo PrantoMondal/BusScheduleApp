@@ -22,12 +22,16 @@ class ScheduleListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScheduleListBinding.inflate(inflater,container,false)
-        val scheduleAdapter = ScheduleAdapter()
+        val scheduleAdapter = ScheduleAdapter (::onMenuItemClicked)
         binding.scheduleRV.layoutManager = LinearLayoutManager(requireActivity())
         binding.scheduleRV.adapter = scheduleAdapter
-        scheduleAdapter.submitList(
-            viewModel.getAllSchedules()
-        )
+
+            viewModel.getAllSchedules().observe(viewLifecycleOwner){
+                scheduleList->
+                scheduleAdapter.submitList(scheduleList)
+            }
+
+
         binding.scheduleRV.addOnScrollListener(object :RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -47,6 +51,15 @@ class ScheduleListFragment : Fragment() {
         }
         return binding.root
     }
+    private fun onMenuItemClicked(busSchedule: BusSchedule,action: RowAction){
+        when(action){
+            RowAction.EDIT -> {
 
+            }
+            RowAction.DELETE -> {
+                viewModel.deleteSchedule(busSchedule)
+            }
+        }
+    }
 
 }

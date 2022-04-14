@@ -1,12 +1,15 @@
 package com.example.actioninputspranto
+import android.media.browse.MediaBrowser
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.actioninputspranto.databinding.ScheduleRowBinding
 
-class ScheduleAdapter :ListAdapter<BusSchedule,ScheduleAdapter.ScheduleViewHolder>(ScheduleDiffUtil()){
+class ScheduleAdapter(val menuItemCallback: (BusSchedule,RowAction) -> Unit) :
+    ListAdapter<BusSchedule,ScheduleAdapter.ScheduleViewHolder>(ScheduleDiffUtil()){
     class ScheduleViewHolder(val binding: ScheduleRowBinding):
             RecyclerView.ViewHolder(binding.root){
                 fun bind(busSchedule: BusSchedule){
@@ -36,9 +39,29 @@ class ScheduleAdapter :ListAdapter<BusSchedule,ScheduleAdapter.ScheduleViewHolde
         holder.binding.rowFavorite.setOnClickListener {
             schedule.favorite = !schedule.favorite
             holder.bind(schedule)
-
+        }
+        val menuIV = holder.binding.menuIV
+        holder.binding.menuIV.setOnClickListener {
+            val popUpMenu = PopupMenu(menuIV.context, menuIV)
+            popUpMenu.menuInflater.inflate(R.menu.row_menu,popUpMenu.menu)
+            popUpMenu.show()
+            //lambda block
+            popUpMenu.setOnMenuItemClickListener {
+                val action : RowAction = when(it.itemId){
+                    R.id.item_edit -> {
+                       RowAction.EDIT
+                    }
+                    R.id.item_delete -> {
+                        RowAction.DELETE
+                    }
+                    else -> RowAction.NONE
+                }
+                menuItemCallback(schedule,action)
+                true
+            }
         }
     }
-
-
+}
+enum class RowAction{
+    EDIT, DELETE, NONE
 }

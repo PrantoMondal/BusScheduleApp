@@ -2,6 +2,7 @@ package com.example.actioninputspranto.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import com.example.actioninputspranto.BusSchedule
 import com.example.actioninputspranto.db.ScheduleDB
 import com.example.actioninputspranto.repos.ScheduleLocalRepository
@@ -19,6 +20,6 @@ class ScheduleViewModel (application: Application)
 
     fun deleteSchedule(busSchedule: BusSchedule) = repository.deleteSchedule(busSchedule)
 
-    fun getAllSchedules(): List<BusSchedule> = repository.getAllSchedules()
+    fun getAllSchedules(): LiveData<List<BusSchedule>> = repository.getAllSchedules()
 
 }

@@ -1,5 +1,6 @@
 package com.example.actioninputspranto.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.actioninputspranto.BusSchedule
 
@@ -15,5 +16,5 @@ interface ScheduleDao {
     fun deleteSchedule(busSchedule: BusSchedule)
 
     @Query("select * from tbl_schedule")
-    fun getAllSchedules():List<BusSchedule>
+    fun getAllSchedule():LiveData<List<BusSchedule>>
 }
