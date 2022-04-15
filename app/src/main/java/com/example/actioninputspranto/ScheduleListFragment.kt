@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.actioninputspranto.customdialogs.CustomAlertDialog
 import com.example.actioninputspranto.databinding.FragmentScheduleListBinding
 import com.example.actioninputspranto.db.ScheduleDB
 import com.example.actioninputspranto.viewmodels.ScheduleViewModel
@@ -57,7 +58,16 @@ class ScheduleListFragment : Fragment() {
 
             }
             RowAction.DELETE -> {
-                viewModel.deleteSchedule(busSchedule)
+                CustomAlertDialog(
+                    icon = R.drawable.ic_baseline_delete_24,
+                    title = "Delete ${busSchedule.name}?",
+                    body = "Are you sure to delete this item ?",
+                    positiveButtonText = "YES",
+                    negativeButtonText = "CANCEL"
+                ){
+                    viewModel.deleteSchedule(busSchedule)
+                }.show(childFragmentManager,null)
+
             }
         }
     }
