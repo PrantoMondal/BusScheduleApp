@@ -17,4 +17,7 @@ interface ScheduleDao {
 
     @Query("select * from tbl_schedule")
     fun getAllSchedule():LiveData<List<BusSchedule>>
+
+    @Query("select * from tbl_schedule where id = :id")
+    fun getScheduleById(id:Long):LiveData<BusSchedule>
 }

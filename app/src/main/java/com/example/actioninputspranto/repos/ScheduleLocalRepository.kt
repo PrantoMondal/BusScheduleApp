@@ -12,4 +12,8 @@ class ScheduleLocalRepository (private val dao:ScheduleDao){
     fun deleteSchedule(busSchedule: BusSchedule) = dao.deleteSchedule(busSchedule)
 
     fun getAllSchedules(): LiveData<List<BusSchedule>> = dao.getAllSchedule()
+
+    fun getScheduleById(id:Long): LiveData<BusSchedule> = dao.getScheduleById(id)
+
+
 }

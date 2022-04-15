@@ -22,4 +22,8 @@ class ScheduleViewModel (application: Application)
 
     fun getAllSchedules(): LiveData<List<BusSchedule>> = repository.getAllSchedules()
 
+    fun getScheduleById(id:Long): LiveData<BusSchedule> = repository.getScheduleById(id)
+
+
+
 }

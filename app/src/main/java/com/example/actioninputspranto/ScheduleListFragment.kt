@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.example.actioninputspranto.customdialogs.CustomAlertDialog
 import com.example.actioninputspranto.databinding.FragmentScheduleListBinding
 import com.example.actioninputspranto.db.ScheduleDB
 import com.example.actioninputspranto.viewmodels.ScheduleViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class ScheduleListFragment : Fragment() {
     private lateinit var binding: FragmentScheduleListBinding
@@ -55,6 +57,8 @@ class ScheduleListFragment : Fragment() {
     private fun onMenuItemClicked(busSchedule: BusSchedule,action: RowAction){
         when(action){
             RowAction.EDIT -> {
+                val bundle = bundleOf("id" to busSchedule.id)
+                findNavController().navigate(R.id.action_scheduleListFragment_to_newScheduleFragment,bundle)
 
             }
             RowAction.DELETE -> {
@@ -66,6 +70,11 @@ class ScheduleListFragment : Fragment() {
                     negativeButtonText = "CANCEL"
                 ){
                     viewModel.deleteSchedule(busSchedule)
+                    val snackbar = Snackbar.make(binding.scheduleRV,"Deleted",Snackbar.LENGTH_LONG)
+                    snackbar.setAction("UNDO",){
+                        viewModel.addSchedule(busSchedule)
+                    }
+                    snackbar.show()
                 }.show(childFragmentManager,null)
 
             }

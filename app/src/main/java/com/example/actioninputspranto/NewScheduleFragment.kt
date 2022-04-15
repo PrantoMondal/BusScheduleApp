@@ -23,10 +23,11 @@ class NewScheduleFragment : Fragment() {
     private val viewModel:ScheduleViewModel by activityViewModels()
     private lateinit var binding: FragmentNewScheduleBinding
     private var from = "Dhaka"
-    private var to = "Dhaka"
+    private var to = "Rajshahi"
     private var busType = "Economy"
     private var selectedDate = ""
     private var selectedTime = ""
+    private var id:Long? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +35,28 @@ class NewScheduleFragment : Fragment() {
         binding = FragmentNewScheduleBinding.inflate(inflater,container,false)
         initCitySpinner()
         initBusTypeRadioGroup()
+
+        id = arguments?.getLong("id")
+        if (id!=null){
+            binding.saveBtn.setText("Update")
+            viewModel.getScheduleById(id!!).observe(viewLifecycleOwner){
+                binding.BusNameInputET.setText(it.name)
+                binding.showDateTV.setText(it.departureDate)
+                binding.showTimeTV.setText(it.departureTime)
+                val fromIndex = cityList.indexOf(it.from)
+                val toIndex = cityList.indexOf(it.to)
+                binding.fromCitySpinner.setSelection(fromIndex)
+                binding.toCitySpinner.setSelection(toIndex)
+                if (it.busType == "Economy"){
+                    binding.busTypeRG.check(R.id.economyRB)
+                }
+                else if(it.busType == "Business") {
+                    binding.busTypeRG.check(R.id.businessRB)
+                }
+
+//                binding.BusNameInputET.setText(it.name)
+            }
+        }
         binding.dateBtn.setOnClickListener {
             DatePickerFragment {
                 selectedDate = it
@@ -62,7 +85,6 @@ class NewScheduleFragment : Fragment() {
             return
         }
         val schedule = BusSchedule(
-            id = System.currentTimeMillis(),
             name = busName,
             from = from,
             to = to,
@@ -70,7 +92,15 @@ class NewScheduleFragment : Fragment() {
             departureTime = selectedTime,
             busType = busType
         )
-        viewModel.addSchedule(schedule)
+        if (id != null){
+            schedule.id = id!!
+            viewModel.updateSchedule(schedule)
+        }
+        else{
+            viewModel.addSchedule(schedule)
+        }
+
+
         findNavController().navigate(R.id.action_newScheduleFragment_to_scheduleListFragment)
 
         Log.d("ScheduleInfoCheck","saveInfo: $schedule")
@@ -121,5 +151,5 @@ class NewScheduleFragment : Fragment() {
 
 }
 
-val cityList = listOf("Dhaka","Chittagong","Rajshahi",
+val cityList = listOf("Dhaka","Chittagong","Rajshahi","Manda","Naogaon",
     "Khulna","Sylhet","Cox's Bazar","Comilla","Faridpur","Barishal")
