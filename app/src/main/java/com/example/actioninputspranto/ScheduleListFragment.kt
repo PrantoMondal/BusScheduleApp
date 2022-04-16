@@ -25,11 +25,11 @@ class ScheduleListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScheduleListBinding.inflate(inflater,container,false)
-        val scheduleAdapter = ScheduleAdapter (::onMenuItemClicked)
+        val scheduleAdapter = ScheduleAdapter (::onMenuItemClicked,::updateFavourite)
         binding.scheduleRV.layoutManager = LinearLayoutManager(requireActivity())
         binding.scheduleRV.adapter = scheduleAdapter
 
-            viewModel.getAllSchedules().observe(viewLifecycleOwner){
+            viewModel.getAllSchedule().observe(viewLifecycleOwner){
                 scheduleList->
                 scheduleAdapter.submitList(scheduleList)
             }
@@ -54,6 +54,10 @@ class ScheduleListFragment : Fragment() {
         }
         return binding.root
     }
+    private fun updateFavourite(schedule: BusSchedule){
+        viewModel.updateSchedule(schedule)
+    }
+
     private fun onMenuItemClicked(busSchedule: BusSchedule,action: RowAction){
         when(action){
             RowAction.EDIT -> {

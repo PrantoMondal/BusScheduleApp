@@ -23,7 +23,7 @@ class NewScheduleFragment : Fragment() {
     private val viewModel:ScheduleViewModel by activityViewModels()
     private lateinit var binding: FragmentNewScheduleBinding
     private var from = "Dhaka"
-    private var to = "Rajshahi"
+    private var to = "Dhaka"
     private var busType = "Economy"
     private var selectedDate = ""
     private var selectedTime = ""
@@ -41,8 +41,10 @@ class NewScheduleFragment : Fragment() {
             binding.saveBtn.setText("Update")
             viewModel.getScheduleById(id!!).observe(viewLifecycleOwner){
                 binding.BusNameInputET.setText(it.name)
-                binding.showDateTV.setText(it.departureDate)
-                binding.showTimeTV.setText(it.departureTime)
+                binding.showDateTV.text = it.departureDate
+                selectedDate = it.departureDate
+                binding.showTimeTV.text = it.departureTime
+                selectedTime = it.departureTime
                 val fromIndex = cityList.indexOf(it.from)
                 val toIndex = cityList.indexOf(it.to)
                 binding.fromCitySpinner.setSelection(fromIndex)
@@ -53,8 +55,7 @@ class NewScheduleFragment : Fragment() {
                 else if(it.busType == "Business") {
                     binding.busTypeRG.check(R.id.businessRB)
                 }
-
-//                binding.BusNameInputET.setText(it.name)
+                binding.saveBtn.tag = it.favorite
             }
         }
         binding.dateBtn.setOnClickListener {
@@ -90,10 +91,12 @@ class NewScheduleFragment : Fragment() {
             to = to,
             departureDate = selectedDate,
             departureTime = selectedTime,
-            busType = busType
+            busType = busType,
+
         )
         if (id != null){
             schedule.id = id!!
+            schedule.favorite = binding.saveBtn.tag as Boolean
             viewModel.updateSchedule(schedule)
         }
         else{

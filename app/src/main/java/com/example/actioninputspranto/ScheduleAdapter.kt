@@ -1,6 +1,7 @@
 package com.example.actioninputspranto
 import android.media.browse.MediaBrowser
 import android.view.LayoutInflater
+import android.view.ScrollCaptureCallback
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +9,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.actioninputspranto.databinding.ScheduleRowBinding
 
-class ScheduleAdapter(val menuItemCallback: (BusSchedule,RowAction) -> Unit) :
+class ScheduleAdapter(
+    val menuItemCallback: (BusSchedule,RowAction) -> Unit,val favouriteCallback: (BusSchedule) -> Unit
+    ) :
     ListAdapter<BusSchedule,ScheduleAdapter.ScheduleViewHolder>(ScheduleDiffUtil()){
     class ScheduleViewHolder(val binding: ScheduleRowBinding):
             RecyclerView.ViewHolder(binding.root){
@@ -39,6 +42,7 @@ class ScheduleAdapter(val menuItemCallback: (BusSchedule,RowAction) -> Unit) :
         holder.binding.rowFavorite.setOnClickListener {
             schedule.favorite = !schedule.favorite
             holder.bind(schedule)
+            favouriteCallback(schedule)
         }
         val menuIV = holder.binding.menuIV
         holder.binding.menuIV.setOnClickListener {
